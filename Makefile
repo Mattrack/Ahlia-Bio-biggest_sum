@@ -24,4 +24,4 @@ test	:
 	./$(NAME) 3 -1 -5 2 4 -3 6 -4 2 5 -8 3 1 -7 6 -2
 # Must be 12
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re test
