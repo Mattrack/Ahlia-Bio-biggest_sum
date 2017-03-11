@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <limits.h>
 
+#define CYAN	"\x1B[36m"
+#define RESET	"\x1B[0m"
+
 /**
  * _atoi - Converts a string to a number
  *
@@ -62,10 +65,11 @@ int *init_array(size_t size, const char **av)
  *
  * @array: Pointer to the array of integers
  * @size: Size of the array
+ * @start: Pointer to the int to store the first index of the biggest sum
  *
  * Return: The biggest sum
  */
-int biggest_sum(int *array, size_t size)
+int biggest_sum(int *array, size_t size, size_t *start)
 {
 	size_t i;
 	int max_so_far;
@@ -75,6 +79,8 @@ int biggest_sum(int *array, size_t size)
 	max_ending_here = 0;
 	for (i = 0; i < size; ++i)
 	{
+		if (max_ending_here == 0)
+			*start = i;
 		max_ending_here = max_ending_here + array[i];
 		if (max_so_far < max_ending_here)
 			max_so_far = max_ending_here;
@@ -89,16 +95,28 @@ int biggest_sum(int *array, size_t size)
  *
  * @array: Pointer to the array to be printed
  * @size: Size of the array
+ * @biggest: Biggest sum
+ * @idx: Index of the biggest sum
  */
-void print_array(const int *array, size_t size)
+void print_array(const int *array, size_t size, int biggest, size_t idx)
 {
 	size_t i;
+	int sum, passed;
 
-	for (i = 0; i < size; ++i)
+	for (passed = 0, sum = 0, i = 0; i < size; ++i)
 	{
 		if (i)
 			printf(", ");
+		if (i >= idx)
+		{
+			sum += array[i];
+			if (!passed)
+				printf(CYAN);
+			if (sum == biggest)
+				passed = 1;
+		}
 		printf("%d", array[i]);
+		printf(RESET);
 	}
 	printf("\n");
 }
@@ -114,7 +132,7 @@ void print_array(const int *array, size_t size)
 int main(int ac, const char **av)
 {
 	int *array;
-	size_t size;
+	size_t size, i;
 	int biggest;
 
 	if (ac < 2)
@@ -126,9 +144,9 @@ int main(int ac, const char **av)
 	array = init_array(size, av + 1);
 	if (!array)
 		return (EXIT_FAILURE);
-	biggest = biggest_sum(array, size);
-	free(array);
-	print_array(array, size);
+	biggest = biggest_sum(array, size, &i);
+	print_array(array, size, biggest, i);
 	printf("Biggest sum: %d\n", biggest);
+	free(array);
 	return (EXIT_SUCCESS);
 }
