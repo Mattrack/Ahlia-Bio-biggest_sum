@@ -85,6 +85,25 @@ int biggest_sum(int *array, size_t size)
 }
 
 /**
+ * print_array - Prints out an array of integers
+ *
+ * @array: Pointer to the array to be printed
+ * @size: Size of the array
+ */
+void print_array(const int *array, size_t size)
+{
+	size_t i;
+
+	for (i = 0; i < size; ++i)
+	{
+		if (i)
+			printf(", ");
+		printf("%d", array[i]);
+	}
+	printf("\n");
+}
+
+/**
  * main - Entry point
  *
  * @ac: Arguments counter
@@ -109,6 +128,7 @@ int main(int ac, const char **av)
 		return (EXIT_FAILURE);
 	biggest = biggest_sum(array, size);
 	free(array);
+	print_array(array, size);
 	printf("Biggest sum: %d\n", biggest);
 	return (EXIT_SUCCESS);
 }
