@@ -20,7 +20,7 @@ fclean	: clean
 
 re	: fclean all
 
-test	:
+test	: $(NAME)
 	./$(NAME) 3 -1 -5 2 4 -3 6 -4 2 5 -8 3 1 -7 6 -2
 # Must be 12
 
